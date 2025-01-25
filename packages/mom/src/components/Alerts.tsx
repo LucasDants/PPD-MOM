@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
 export type Alert = {
   deviceId: number
-  deviceName: number
+  deviceName: string
   measure: number
   measureType: string
   date: Date

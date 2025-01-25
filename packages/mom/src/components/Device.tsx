@@ -8,11 +8,13 @@ import {
   CardTitle
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { socket } from "@/services/socket"
 import { devicesAtom } from "@/store"
 import dayjs from 'dayjs'
 import { useSetAtom } from "jotai"
 import { useEffect, useState } from "react"
 import { generateMockMeasure } from "../utils/generateMockMeasure"
+import { Alert } from "./Alerts"
 import { CardDescription } from "./ui/card"
 
 type LastMeasure = {
@@ -60,7 +62,15 @@ export function Device({ data }: DeviceProps) {
         setLastMeasure({ measure, date: new Date() })
 
         if (measure > maxSafeMeasure || measure < minSafeMeasure) {
-          // TODO: Publish message
+          const alert: Alert = {
+            deviceId: id,
+            deviceName: name,
+            measure,
+            measureType,
+            date: new Date()
+          }
+
+          socket.emit("alert", alert)
         }
       }, measureIntervalInSeconds * 1000);
 

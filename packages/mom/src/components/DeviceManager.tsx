@@ -1,11 +1,23 @@
+import { socket } from "@/services/socket";
 import { alertsAtom } from "@/store";
 import { useSetAtom } from "jotai";
+import { useEffect } from "react";
 import { AddDeviceForm } from "./AddDeviceForm";
 import { Alerts } from "./Alerts";
 import { Separator } from "./ui/separator";
 
 export function DeviceManager() {
   const setAlerts = useSetAtom(alertsAtom)
+
+  useEffect(() => {
+    const unsubscribe = socket.on('alert', (alert) => {
+      setAlerts((prev) => [...prev, alert])
+    })
+
+    return () => {
+      unsubscribe.disconnect()
+    }
+  }, [setAlerts])
 
   return (
     <aside className="border-r p-4">
