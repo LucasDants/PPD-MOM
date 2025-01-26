@@ -60,7 +60,7 @@ export function Device({ data }: DeviceProps) {
       const intervalId = setInterval(() => {
         const measure = generateMockMeasure(minSafeMeasure, maxSafeMeasure)
         setLastMeasure({ measure, date: new Date() })
-
+        console.log(measure)
         if (measure > maxSafeMeasure || measure < minSafeMeasure) {
           const alert: Alert = {
             deviceId: id,
@@ -69,18 +69,18 @@ export function Device({ data }: DeviceProps) {
             measureType,
             date: new Date()
           }
-
+          console.log("emit")
           socket.emit("alert", alert)
         }
       }, measureIntervalInSeconds * 1000);
 
 
-      return () => clearInterval(intervalId) // TODO: Cleanup
+      return () => clearInterval(intervalId)
     }
-  }, [isOnline, maxSafeMeasure, minSafeMeasure, measureIntervalInSeconds])
+  }, [isOnline, maxSafeMeasure, minSafeMeasure, measureIntervalInSeconds, id, name, measureType])
 
   return (
-    <Card className="max-w-[350px] h-fit">
+    <Card className="max-w-[400px] h-fit">
       <CardHeader>
         <CardTitle>{id} - {name}</CardTitle>
         <CardDescription>Esse equipamento mede {measureType}. Seus valores de funcionamento padrão estão entre {minSafeMeasure} {measureType} e {maxSafeMeasure} {measureType}.</CardDescription>

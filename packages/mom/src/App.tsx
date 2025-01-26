@@ -1,10 +1,18 @@
 import { useAtomValue } from "jotai"
+import { useEffect } from "react"
 import { Device } from "./components/Device"
 import { DeviceManager } from "./components/DeviceManager"
+import { socket } from "./services/socket"
 import { devicesAtom } from "./store"
 
 function App() {
   const devices = useAtomValue(devicesAtom)
+
+  useEffect(() => {
+    socket.connect()
+
+    return () => { socket.disconnect() }
+  }, [])
 
   return (
     <div className="flex flex-1 h-screen">

@@ -14,12 +14,13 @@ io.use(async (_, next) => {
 
 io.on('connection', socket => {
   socket.on("alert", (alert: Alert) => {
+    console.log("received")
     mqConnectionPublisher.sendToQueue('alerts', alert)
   })
 
   mqConnectionSubscriber.consume("alerts", msg => {
     const alert = JSON.parse(msg) as Alert
-
+    console.log("sent", alert)
     socket.emit('alert', alert)
   })
 })
